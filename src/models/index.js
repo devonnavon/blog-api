@@ -1,33 +1,19 @@
-let users = {
-	1: {
-		id: '1',
-		username: 'lord',
-		password: 'john',
-	},
-	2: {
-		id: '2',
-		username: 'dduuudddeee',
-		password: 'dude',
-	},
+import mongoose from 'mongoose';
+
+import User from './user';
+import Post from './post';
+import Comment from './comment';
+
+const connectDb = () => {
+  return mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
 };
 
-let posts = {
-	1: {
-		title: 'First post, kind of nervous',
-		body: 'Hi everyone! Hope you enjoy this post. Thank you!',
-		// user: { type: Schema.Types.ObjectId, ref: 'User' },
-		// comment: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-	},
-};
+const models = { User, Post, Comment };
 
-let comments = {
-	1: {
-		text: 'please stop',
-	},
-};
+export { connectDb };
 
-export default {
-	users,
-	posts,
-	comments,
-};
+export default models;
