@@ -4,6 +4,7 @@ import express from 'express';
 
 import routes from './routes';
 import models, { connectDb } from './models';
+// import router from './routes/post';
 // import { model } from 'mongoose';
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(async (req, res, next) => {
 });
 
 // * Routes * //
+app.use('/login', routes.login);
 app.use('/users', routes.user);
 app.use('/posts', routes.post);
 app.use('/comments', routes.comment);
