@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { BadRequestError } from '../utils/errors';
 
 const router = Router();
 
@@ -14,13 +15,13 @@ router.get('/:postId', async (req, res) => {
   return res.send(post);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const post = await req.context.models.Post.create({
     title: req.body.title,
     body: req.body.body,
     published: req.body.published,
     user: req.context.me.id,
-  });
+  }).catch((error) => next(new BadRequestError(error)));
 
   return res.send(post);
 });
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
 router.delete('/:postId', async (req, res) => {
   const post = await req.context.models.Post.findById(
     req.params.postId,
-  );
+  ).catch((error) => next(new BadRequestError(error)));
 
   if (post) {
     await post.remove();

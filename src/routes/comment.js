@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { BadRequestError } from '../utils/errors';
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.post('/:postId', async (req, res) => {
     text: req.body.text,
     user: req.context.me.id,
     post: req.params.postId,
-  });
+  }).catch((error) => next(new BadRequestError()));
 
   return res.send(comment);
 });
@@ -27,7 +28,7 @@ router.post('/:postId', async (req, res) => {
 router.delete('/:commentId', async (req, res) => {
   const comment = await req.context.models.Comment.findById(
     req.params.commentId,
-  );
+  ).catch((error) => next(new BadRequestError()));
 
   if (comment) {
     await comment.remove();
