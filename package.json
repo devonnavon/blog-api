@@ -2,7 +2,7 @@
   "name": "blog-api",
   "version": "1.0.0",
   "engines": {
-    "node": "10.15.1"
+    "node": "12.2.0"
   },
   "description": "",
   "main": "index.js",
