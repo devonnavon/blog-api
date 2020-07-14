@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
   let { username, password } = req.body;
   const user = await req.context.models.User.findByLogin(username);
   if (user) {
-    if (user.password === password) {
+    if (await user.comparePassword(password)) {
       //db calls later
       //   opts = {};
       //   opts.expiresIn = 120;
