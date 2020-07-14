@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./src -s",
-    "build": "npm run clean && npm run build-babel",
+    "xxbuild": "npm run clean && npm run build-babel",
     "start": "node ./build/index.js",
     "devstart": "nodemon --exec babel-node src/index.js"
   },
