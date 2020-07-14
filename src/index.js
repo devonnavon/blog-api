@@ -6,7 +6,6 @@ import routes from './routes';
 import models, { connectDb } from './models';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
-import { model } from 'mongoose';
 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;

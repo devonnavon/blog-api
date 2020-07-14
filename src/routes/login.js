@@ -1,9 +1,5 @@
 import { Router } from 'express';
-
-//jwt stuff
-
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 
 // //passport stuff
 // const passport = require("passport");

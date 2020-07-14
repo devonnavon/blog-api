@@ -5,7 +5,7 @@ import Post from './post';
 import Comment from './comment';
 
 const connectDb = () => {
-  return mongoose.connect(process.env.DATABASE_URL, {
+  return mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
