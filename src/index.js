@@ -4,9 +4,12 @@ import express from 'express';
 
 import routes from './routes';
 import models, { connectDb } from './models';
-// import router from './routes/post';
-// import { model } from 'mongoose';
+import passport from 'passport';
+import passportJWT from 'passport-jwt';
+import { model } from 'mongoose';
 
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 const app = express();
 
 // * Application-Level Middleware * //
@@ -21,11 +24,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Custom Middleware
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.SECRET_KEY,
+    },
+    async (jwtPayload, cb) => {
+      const user = await models.User.findByLogin(
+        jwtPayload.username,
+      ).catch((err) => {
+        return cb(err);
+      });
+      return cb(null, user);
+    },
+  ),
+);
 
 app.use(async (req, res, next) => {
   req.context = {
     models,
-    me: await models.User.findByLogin('lord'),
   };
   next();
 });
@@ -33,7 +51,11 @@ app.use(async (req, res, next) => {
 // * Routes * //
 app.use('/login', routes.login);
 app.use('/users', routes.user);
-app.use('/posts', routes.post);
+app.use(
+  '/posts',
+  passport.authenticate('jwt', { session: false }),
+  routes.post,
+);
 app.use('/comments', routes.comment);
 app.use('/session', routes.session);
 

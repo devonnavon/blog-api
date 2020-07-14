@@ -18,7 +18,7 @@ router.get('/:postId', async (req, res) => {
 router.post('/:postId', async (req, res) => {
   const comment = await req.context.models.Comment.create({
     text: req.body.text,
-    user: req.context.me.id,
+    user: req.user.id,
     post: req.params.postId,
   }).catch((error) => next(new BadRequestError()));
 

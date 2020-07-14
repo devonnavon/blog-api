@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
     title: req.body.title,
     body: req.body.body,
     published: req.body.published,
-    user: req.context.me.id,
+    user: req.user.id,
   }).catch((error) => next(new BadRequestError(error)));
 
   return res.send(post);
