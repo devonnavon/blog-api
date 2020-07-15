@@ -9,6 +9,7 @@ import routes from './routes';
 import models, { connectDb } from './models';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
+import logger from 'morgan';
 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
@@ -19,6 +20,7 @@ const app = express();
 // Third-Party Middleware
 
 app.use(cors());
+app.use(logger('dev'));
 
 // Built-In Middleware
 
@@ -55,7 +57,7 @@ app.use('/login', routes.login);
 app.use('/users', routes.user);
 app.use(
   '/posts',
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   routes.post,
 );
 app.use('/comments', routes.comment);
@@ -121,12 +123,14 @@ const seedDb = async () => {
     title: "What's going on",
     body: 'What is really going on, what is going on??',
     user: user1.id,
+    published: true,
   });
 
   const post2 = new models.Post({
     title: 'plz comment on this',
     body: 'pleeeeaaassseee',
     user: user3.id,
+    published: false,
   });
 
   const comment1p1 = new models.Comment({

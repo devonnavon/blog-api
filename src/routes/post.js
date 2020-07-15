@@ -15,6 +15,18 @@ router.get('/:postId', async (req, res) => {
   return res.send(post);
 });
 
+router.put('/:postId', async (req, res) => {
+  const post = await req.context.models.Post.findById(
+    req.params.postId,
+  ).catch((error) => next(new BadRequestError(error)));
+  post.title = req.body.title;
+  post.body = req.body.body;
+  post.published = req.body.published;
+  await post.save();
+  // .catch((error) => next(new BadRequestError(error)));
+  return res.send(post);
+});
+
 router.post('/', async (req, res, next) => {
   const post = await req.context.models.Post.create({
     title: req.body.title,
