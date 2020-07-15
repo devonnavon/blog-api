@@ -20,6 +20,8 @@ var _passport = _interopRequireDefault(require("passport"));
 
 var _passportJwt = _interopRequireDefault(require("passport-jwt"));
 
+var _morgan = _interopRequireDefault(require("morgan"));
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -35,7 +37,8 @@ var ExtractJWT = _passportJwt["default"].ExtractJwt;
 var app = (0, _express["default"])(); // * Application-Level Middleware * //
 // Third-Party Middleware
 
-app.use((0, _cors["default"])()); // Built-In Middleware
+app.use((0, _cors["default"])());
+app.use((0, _morgan["default"])('dev')); // Built-In Middleware
 
 app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
@@ -100,9 +103,8 @@ app.use( /*#__PURE__*/function () {
 
 app.use('/login', _routes["default"].login);
 app.use('/users', _routes["default"].user);
-app.use('/posts', _passport["default"].authenticate('jwt', {
-  session: false
-}), _routes["default"].post);
+app.use('/posts', // passport.authenticate('jwt', { session: false }),
+_routes["default"].post);
 app.use('/comments', _routes["default"].comment);
 app.use('/session', _routes["default"].session);
 app.get('*', function (req, res, next) {
@@ -173,12 +175,14 @@ var seedDb = /*#__PURE__*/function () {
             post1 = new _models["default"].Post({
               title: "What's going on",
               body: 'What is really going on, what is going on??',
-              user: user1.id
+              user: user1.id,
+              published: true
             });
             post2 = new _models["default"].Post({
               title: 'plz comment on this',
               body: 'pleeeeaaassseee',
-              user: user3.id
+              user: user3.id,
+              published: false
             });
             comment1p1 = new _models["default"].Comment({
               text: "dude idk, i've been wondering the same",
