@@ -16,13 +16,19 @@ router.get('/:postId', async (req, res) => {
 });
 
 router.post('/:postId', async (req, res) => {
-  const comment = await req.context.models.Comment.create({
+  const comment = {
     text: req.body.text,
-    user: req.user.id,
     post: req.params.postId,
-  }).catch((error) => next(new BadRequestError()));
+  };
 
-  return res.send(comment);
+  if (req.user) {
+    comment.push({ user: req.user.id });
+  }
+  const commentPost = await req.context.models.Comment.create(
+    comment,
+  ).catch((error) => next(new BadRequestError()));
+
+  return res.send(commentPost);
 });
 
 router.delete('/:commentId', async (req, res) => {
