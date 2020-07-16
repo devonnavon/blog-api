@@ -70,25 +70,32 @@ router.get('/:postId', /*#__PURE__*/function () {
 }());
 router.post('/:postId', /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-    var comment;
+    var comment, commentPost;
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            _context3.next = 2;
-            return req.context.models.Comment.create({
+            comment = {
               text: req.body.text,
-              user: req.user.id,
               post: req.params.postId
-            })["catch"](function (error) {
+            };
+
+            if (req.user) {
+              comment.push({
+                user: req.user.id
+              });
+            }
+
+            _context3.next = 4;
+            return req.context.models.Comment.create(comment)["catch"](function (error) {
               return next(new _errors.BadRequestError());
             });
 
-          case 2:
-            comment = _context3.sent;
-            return _context3.abrupt("return", res.send(comment));
-
           case 4:
+            commentPost = _context3.sent;
+            return _context3.abrupt("return", res.send(commentPost));
+
+          case 6:
           case "end":
             return _context3.stop();
         }
