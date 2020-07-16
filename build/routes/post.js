@@ -9,6 +9,10 @@ var _express = require("express");
 
 var _errors = require("../utils/errors");
 
+var _passport = _interopRequireDefault(require("passport"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -101,7 +105,9 @@ router.put('/:postId', /*#__PURE__*/function () {
     return _ref3.apply(this, arguments);
   };
 }());
-router.post('/', /*#__PURE__*/function () {
+router.post('/', _passport["default"].authenticate('jwt', {
+  session: false
+}), /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res, next) {
     var post;
     return regeneratorRuntime.wrap(function _callee4$(_context4) {

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { BadRequestError } from '../utils/errors';
+import passport from 'passport';
 
 const router = Router();
 
@@ -27,16 +28,20 @@ router.put('/:postId', async (req, res) => {
   return res.send(post);
 });
 
-router.post('/', async (req, res, next) => {
-  const post = await req.context.models.Post.create({
-    title: req.body.title,
-    body: req.body.body,
-    published: req.body.published,
-    user: req.user.id,
-  }).catch((error) => next(new BadRequestError(error)));
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    const post = await req.context.models.Post.create({
+      title: req.body.title,
+      body: req.body.body,
+      published: req.body.published,
+      user: req.user.id,
+    }).catch((error) => next(new BadRequestError(error)));
 
-  return res.send(post);
-});
+    return res.send(post);
+  },
+);
 
 router.delete('/:postId', async (req, res) => {
   const post = await req.context.models.Post.findById(
